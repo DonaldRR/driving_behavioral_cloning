@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     """ Process CSVs """
     # Load CSVs
-    data_dirs = glob.glob("./data/*")
+    data_dirs = glob.glob("/opt/data/*")
     csv_fn = "driving_log.csv"
     csv_fns = [os.path.join(data_dirs[i], csv_fn) for i in range(len(data_dirs))]
 
@@ -34,7 +34,8 @@ if __name__ == '__main__':
 
     """ Read images """
     n_imgs = center_img_fns.shape[0]
-    imgs = [cv2.cvtColor(cv2.imread(center_img_fns[i]), cv2.COLOR_BGR2RGB) for i in tqdm(range(n_imgs))]
+    print(os.path.join('/opt',center_img_fns[0][68:]))
+    imgs = [ cv2.imread(os.path.join('/opt',center_img_fns[i][68:]), cv2.COLOR_BGR2RGB) for i in tqdm(range(n_imgs))]
     imgs = np.array(imgs)
 
     """ Get training and vlidation data """
