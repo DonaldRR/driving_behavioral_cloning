@@ -56,8 +56,8 @@ if __name__ == '__main__':
     imgs_ori = np.concatenate((imgs_cen, imgs_left, imgs_right))
     print("img ori:", imgs_ori.shape)
     angles_ori = np.concatenate((control_info[:, 0],
-                                 np.add(control_info[:, 0], 0.1),
-                                 np.subtract(control_info[:, 0], 0.1)))
+                                 np.add(control_info[:, 0], 0.15),
+                                 np.subtract(control_info[:, 0], 0.15)))
     print("angle ori:", angles_ori.shape)
 
     imgs_flip = np.array([cv2.flip(imgs_ori[i], 1) for i in range(imgs_ori.shape[0])])
