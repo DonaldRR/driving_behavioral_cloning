@@ -25,11 +25,11 @@ def model():
 
         # Convolutions
     conv = BatchNormalization()(input_)
-    conv = Conv2D(16, (3, 3), activation='relu')(conv)
-    conv = Conv2D(16, (3, 3), activation='relu')(conv)
+    conv = Conv2D(64, (3, 3), activation='relu')(conv)
+    conv = Conv2D(64, (3, 3), activation='relu')(conv)
     conv = MaxPool2D((2, 2))(conv)
-    conv = Conv2D(32, (3, 3), activation='relu')(conv)
-    conv = Conv2D(32, (3, 3), activation='relu')(conv)
+    conv = Conv2D(128, (3, 3), activation='relu')(conv)
+    conv = Conv2D(128, (3, 3), activation='relu')(conv)
     conv = MaxPool2D((2, 2))(conv)
 
     # vgg = vgg19_base(input)
