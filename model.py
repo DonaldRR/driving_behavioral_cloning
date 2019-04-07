@@ -1,7 +1,7 @@
 import tensorflow
 import keras
 from keras.models import Model, Input
-from keras.layers import BatchNormalization, Conv2D, MaxPool2D, Flatten, Dense, Dropout, Lambda, Reshape, Cropping2D
+from keras.layers import BatchNormalization, Conv2D, MaxPool2D, Flatten, Dense, Dropout, Lambda, Reshape, Cropping2D, Add
 from keras.optimizers import SGD, Adam
 from keras.backend import resize_images
 from keras.applications.vgg19 import VGG19
