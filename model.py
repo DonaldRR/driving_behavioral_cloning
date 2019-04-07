@@ -20,7 +20,7 @@ def model():
     vgg19_base = VGG19(include_top=False)
     for i in range(len(vgg19_base.layers)):
         vgg19_base.layers[i].trainable = False
-    for i in range(10):
+    for i in range(15):
         vgg19_base.layers.pop()
 
         # Convolutions
