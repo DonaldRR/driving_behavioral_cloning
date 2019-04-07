@@ -35,14 +35,36 @@ if __name__ == '__main__':
     """ Read images """
     n_imgs = center_img_fns.shape[0]
     print(os.path.join('/opt',center_img_fns[0][68:]))
-    imgs = [cv2.resize(cv2.imread(center_img_fns[i][68:])[60:, :, :], (224, 224)) for i in tqdm(range(n_imgs))]
-    imgs = np.array(imgs)
+    imgs_cen = np.array([cv2.imread(center_img_fns[i][68:])
+                         for i in tqdm(range(n_imgs))])
+    imgs_left = np.array([cv2.imread(left_img_fns[i][68:])
+                          for i in tqdm(range(n_imgs))])
+    imgs_right = np.array([cv2.imread(right_img_fns[i][68:])
+                           for i in tqdm(range(n_imgs))])
+    print("cen:", imgs_cen.shape, " left:", imgs_left.shape, " right", imgs_right.shape)
 
-    """ Get training and vlidation data """
+    imgs_ori = np.concatenate((imgs_cen, imgs_left, imgs_right))
+    print("img ori:", imgs_ori.shape)
+    angles_ori = np.concatenate((control_info[:, 0],
+                                 np.add(control_info[:, 0], 0.1),
+                                 np.subtract(control_info[:, 0], 0.1)))
+    print("angle ori:", angles_ori.shape)
+
+    imgs_flip = np.array([cv2.flip(imgs_ori[i], 1) for i in range(imgs_ori.shape[0])])
+    print("img flip:", imgs_flip.shape)
+    angles_flip = np.array([-angles_ori[i] for i in range(angles_ori.shape[0])])
+    print("angles flip:", angles_flip.shape)
+
+    imgs = np.concatenate((imgs_ori, imgs_flip))
+    angles = np.concatenate((angles_ori, angles_flip))
+    print("imgs:", imgs.shape)
+    print("angles:", angles.shape)
+
     # Input data to model
-    train_X, valid_X, train_y, valid_y = train_test_split(imgs, control_info[:, 0], test_size=0.2)
-    print("Train size: {}".format(len(train_X)))
-    print("Validation size: {}".format(len(valid_y)))
+    import sklearn
+    from sklearn.model_selection import train_test_split
+
+    train_X, valid_X, train_y, valid_y = train_test_split(imgs, angles, test_size=0.2)
 
     """ Load model """
     model = model()
