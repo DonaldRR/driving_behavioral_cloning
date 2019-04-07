@@ -33,8 +33,8 @@ def generator(samples, batch_size=32):
                 left_image = cv2.imread(os.path.join('./ori_data', batch_sample[1].strip(' ')))
                 right_image = cv2.imread(os.path.join('./ori_data', batch_sample[2].strip(' ')))
                 center_angle = float(batch_sample[3])
-                left_angle = float(batch_sample[3]) + 0.2
-                right_angle = float(batch_sample[3]) - 0.2
+                left_angle = float(batch_sample[3]) + 0.1
+                right_angle = float(batch_sample[3]) - 0.1
                 images.extend([center_image, left_image, right_image,
                                cv2.flip(center_image, 1), cv2.flip(left_image, 1), cv2.flip(right_image, 1)])
                 angles.extend([center_angle, left_angle, right_angle,
@@ -79,7 +79,7 @@ if __name__ == '__main__':
 
     """ Training """
     print("Start training ...")
-    n_epochs = 8
+    n_epochs = 3
     batch_size = 32
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mean_squared_error'])
     hist = model.fit_generator(train_generator,
