@@ -18,14 +18,12 @@ def model():
     # input_ = Lambda(lambda x: resize_images(x, ))
 
     # Convolutions
-    # base = vgg19.VGG19(include_top=False)()
-
     conv = BatchNormalization()(input_)
-    conv = Conv2D(8, (3, 3), activation='relu')(conv)
-    # conv = Conv2D(16, (3, 3, ), activation='relu')(conv)
+    conv = Conv2D(16, (3, 3), activation='relu')(conv)
+    conv = Conv2D(16, (3, 3), activation='relu')(conv)
     conv = MaxPool2D((2, 2))(conv)
     conv = Conv2D(32, (3, 3), activation='relu')(conv)
-    # conv = Conv2D(32, (3, 3), activation='relu')(conv)
+    conv = Conv2D(32, (3, 3), activation='relu')(conv)
     conv = MaxPool2D((2, 2))(conv)
 
     # Denses
@@ -33,6 +31,7 @@ def model():
     dense = Dense(32)(dense)
     dense = Dropout(0.5)(dense)
     dense = Dense(16)(dense)
+    dense = Dropout(0.5)(dense)
 
     # Output
     output = Dense(1)(dense)
