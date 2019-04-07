@@ -52,3 +52,5 @@ if __name__ == '__main__':
     batch_size = 128
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mean_squared_error'])
     hist = model.fit(train_X, train_y, epochs=n_epochs, batch_size=batch_size, validation_data=[valid_X, valid_y])
+
+    model.save('model.h5')
