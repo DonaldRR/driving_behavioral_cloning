@@ -15,6 +15,11 @@ from sklearn.utils import shuffle
 
 
 def generator(samples, batch_size=32):
+
+    """
+    Samples generator
+    """
+
     num_samples = len(samples)
     while 1:  # Loop forever so the generator never terminates
         shuffle(samples)
@@ -46,6 +51,7 @@ def process_sheet(folder_name):
     """
     Process all running CSV files to one sheet
     """
+
     data_dirs = glob.glob(folder_name)
     csv_fn = "driving_log.csv"
     csv_fns = [os.path.join(data_dirs[i], csv_fn) for i in range(len(data_dirs))]
@@ -61,22 +67,8 @@ def process_sheet(folder_name):
 
 if __name__ == '__main__':
 
-    # Load CSVs
-    # data_dirs = glob.glob("./data/*")
-    # csv_fn = "driving_log.csv"
-    # csv_fns = [os.path.join(data_dirs[i], csv_fn) for i in range(len(data_dirs))]
-    # csv_fns = [os.path.join('./ori_data', csv_fn)]
-
-    # sheet = []
-    # for fn in csv_fns:
-    #     f = open(fn, 'r')
-    #     reader = csv.reader(f)
-    #     for line in reader:
-    #         sheet.append(line)
-    # sheet = np.array(sheet)
-
+    """ Load data"""
     sheet = process_sheet('./ori_data')
-
     train_sheet, valid_sheet = train_test_split(sheet, test_size=0.2)
     train_generator = generator(train_sheet)
     valid_generator = generator(valid_sheet)
@@ -85,11 +77,11 @@ if __name__ == '__main__':
     model = model()
     model.summary()
 
+    """ Training """
     print("Start training ...")
-    n_epochs = 5
+    n_epochs = 8
     batch_size = 32
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mean_squared_error'])
-    # hist = model.fit(train_X, train_y, epochs=n_epochs, batch_size=batch_size, validation_data=[valid_X, valid_y])
     hist = model.fit_generator(train_generator,
                                epochs=n_epochs,
                                steps_per_epoch=ceil(len(train_sheet) / batch_size),
@@ -97,6 +89,7 @@ if __name__ == '__main__':
                                validation_steps=(len(valid_sheet) / batch_size),
                                verbose=1)
 
+    """ Save model"""
     model_name = 'model.h5'
     model.save(model_name)
     print("Model {} saved.".format(model_name))
