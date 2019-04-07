@@ -45,6 +45,7 @@ if __name__ == '__main__':
 
     imgs_cen = np.array([cv2.imread(os.path.join('./ori_data', center_img_fns[i]))
                          for i in tqdm(range(n_imgs))])
+    print(os.path.join('/ori_data', left_img_fns[0]))
     imgs_left = np.array([cv2.imread(os.path.join('./ori_data', left_img_fns[i]))
                           for i in tqdm(range(n_imgs))])
     imgs_right = np.array([cv2.imread(os.path.join('./ori_data', right_img_fns[i]))
