@@ -15,9 +15,10 @@ if __name__ == '__main__':
 
     """ Process CSVs """
     # Load CSVs
-    data_dirs = glob.glob("./data/*")
+    # data_dirs = glob.glob("./data/*")
     csv_fn = "driving_log.csv"
-    csv_fns = [os.path.join(data_dirs[i], csv_fn) for i in range(len(data_dirs))]
+    # csv_fns = [os.path.join(data_dirs[i], csv_fn) for i in range(len(data_dirs))]
+    csv_fns = [os.path.join('./ori_data', csv_fn)]
 
     sheet = []
     for fn in csv_fns:
@@ -34,13 +35,21 @@ if __name__ == '__main__':
 
     """ Read images """
     n_imgs = center_img_fns.shape[0]
-    print(os.path.join('/opt',center_img_fns[0][68:]))
-    imgs_cen = np.array([cv2.imread(center_img_fns[i][68:])
+
+    # imgs_cen = np.array([cv2.imread(center_img_fns[i][68:])
+    #                      for i in tqdm(range(n_imgs))])
+    # imgs_left = np.array([cv2.imread(left_img_fns[i][68:])
+    #                       for i in tqdm(range(n_imgs))])
+    # imgs_right = np.array([cv2.imread(right_img_fns[i][68:])
+    #                        for i in tqdm(range(n_imgs))])
+
+    imgs_cen = np.array([cv2.imread(os.path.join('./ori_data', center_img_fns[i]))
                          for i in tqdm(range(n_imgs))])
-    imgs_left = np.array([cv2.imread(left_img_fns[i][68:])
+    imgs_left = np.array([cv2.imread(os.path.join('./ori_data', left_img_fns[i]))
                           for i in tqdm(range(n_imgs))])
-    imgs_right = np.array([cv2.imread(right_img_fns[i][68:])
+    imgs_right = np.array([cv2.imread(os.path.join('./ori_data', right_img_fns[i]))
                            for i in tqdm(range(n_imgs))])
+
     print("cen:", imgs_cen.shape, " left:", imgs_left.shape, " right", imgs_right.shape)
 
     imgs_ori = np.concatenate((imgs_cen, imgs_left, imgs_right))
