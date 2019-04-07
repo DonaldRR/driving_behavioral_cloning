@@ -28,8 +28,8 @@ def generator(samples, batch_size=32):
                 left_image = cv2.imread(os.path.join('./ori_data', batch_sample[1].strip(' ')))
                 right_image = cv2.imread(os.path.join('./ori_data', batch_sample[2].strip(' ')))
                 center_angle = float(batch_sample[3])
-                left_angle = float(batch_sample[3]) + 0.1
-                right_angle = float(batch_sample[3]) - 0.1
+                left_angle = float(batch_sample[3]) + 0.2
+                right_angle = float(batch_sample[3]) - 0.2
                 images.extend([center_image, left_image, right_image,
                                cv2.flip(center_image, 1), cv2.flip(left_image, 1), cv2.flip(right_image, 1)])
                 angles.extend([center_angle, left_angle, right_angle,
@@ -40,15 +40,15 @@ def generator(samples, batch_size=32):
             y_train = np.array(angles)
             yield sklearn.utils.shuffle(X_train, y_train)
 
-if __name__ == '__main__':
 
+def process_sheet(folder_name):
 
-    """ Process CSVs """
-    # Load CSVs
-    # data_dirs = glob.glob("./data/*")
+    """
+    Process all running CSV files to one sheet
+    """
+    data_dirs = glob.glob(folder_name)
     csv_fn = "driving_log.csv"
-    # csv_fns = [os.path.join(data_dirs[i], csv_fn) for i in range(len(data_dirs))]
-    csv_fns = [os.path.join('./ori_data', csv_fn)]
+    csv_fns = [os.path.join(data_dirs[i], csv_fn) for i in range(len(data_dirs))]
 
     sheet = []
     for fn in csv_fns:
@@ -56,59 +56,30 @@ if __name__ == '__main__':
         reader = csv.reader(f)
         for line in reader:
             sheet.append(line)
-    sheet = np.array(sheet)
-    # Images from center, left and right mounted cameras
-    # center_img_fns, left_img_fns, right_img_fns = sheet[:, 0], sheet[:, 1], sheet[:, 2]
 
-    # [Steering, Throttle, Brake, Speed]
-    # control_info = np.float32(sheet[:, 3:])
+    return np.array(sheet)
 
-    """ Read images """
-    # n_imgs = center_img_fns.shape[0]
+if __name__ == '__main__':
 
-    # imgs_cen = np.array([cv2.imread(center_img_fns[i][68:])
-    #                      for i in tqdm(range(n_imgs))])
-    # imgs_left = np.array([cv2.imread(left_img_fns[i][68:])
-    #                       for i in tqdm(range(n_imgs))])
-    # imgs_right = np.array([cv2.imread(right_img_fns[i][68:])
-    #                        for i in tqdm(range(n_imgs))])
+    # Load CSVs
+    # data_dirs = glob.glob("./data/*")
+    # csv_fn = "driving_log.csv"
+    # csv_fns = [os.path.join(data_dirs[i], csv_fn) for i in range(len(data_dirs))]
+    # csv_fns = [os.path.join('./ori_data', csv_fn)]
 
-    # imgs_cen = np.array([cv2.imread(os.path.join('./ori_data', center_img_fns[i]))
-    #                      for i in tqdm(range(n_imgs))])
-    # print(os.path.join('/ori_data', left_img_fns[0].strip(' ')))
-    # imgs_left = np.array([cv2.imread(os.path.join('./ori_data',  left_img_fns[i].strip(' ')))
-    #                       for i in tqdm(range(n_imgs))])
-    # imgs_right = np.array([cv2.imread(os.path.join('./ori_data', right_img_fns[i].strip(' ')))
-    #                        for i in tqdm(range(n_imgs))])
-    #
-    # print("cen:", imgs_cen.shape, " left:", imgs_left.shape, " right", imgs_right.shape)
-    #
-    # imgs_ori = np.concatenate((imgs_cen, imgs_left, imgs_right))
-    # print("img ori:", imgs_ori.shape)
-    # angles_ori = np.concatenate((control_info[:, 0],
-    #                              np.add(control_info[:, 0], 0.1),
-    #                              np.subtract(control_info[:, 0], 0.1)))
-    # print("angle ori:", angles_ori.shape)
-    #
-    # imgs_flip = np.array([cv2.flip(imgs_ori[i], 1) for i in range(imgs_ori.shape[0])])
-    # print("img flip:", imgs_flip.shape)
-    # angles_flip = np.array([-angles_ori[i] for i in range(angles_ori.shape[0])])
-    # print("angles flip:", angles_flip.shape)
-    #
-    # imgs = np.concatenate((imgs_ori, imgs_flip))
-    # angles = np.concatenate((angles_ori, angles_flip))
-    # print("imgs:", imgs.shape)
-    # print("angles:", angles.shape)
+    # sheet = []
+    # for fn in csv_fns:
+    #     f = open(fn, 'r')
+    #     reader = csv.reader(f)
+    #     for line in reader:
+    #         sheet.append(line)
+    # sheet = np.array(sheet)
 
-    # Input data to model
+    sheet = process_sheet('./ori_data')
 
     train_sheet, valid_sheet = train_test_split(sheet, test_size=0.2)
     train_generator = generator(train_sheet)
     valid_generator = generator(valid_sheet)
-
-    # train_X, valid_X, train_y, valid_y = train_test_split(imgs, angles, test_size=0.2)
-    # print("Training shape:{}, {}".format(train_X.shape, train_y.shape))
-    # print("Validation shape:{}, {}".format(valid_X.shape, valid_y.shape))
 
     """ Load model """
     model = model()
