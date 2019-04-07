@@ -4,7 +4,9 @@ from keras.models import Model, Input
 from keras.layers import BatchNormalization, Conv2D, MaxPool2D, Flatten, Dense, Dropout, Lambda, Reshape, Cropping2D
 from keras.optimizers import SGD, Adam
 from keras.backend import resize_images
-from keras.applications import vgg19, Xception, ResNet50
+from keras.applications.vgg19 import VGG19
+from keras.applications.xception import Xception
+from keras.applications.resnet50 import ResNet50
 
 # Model creator
 def model():
