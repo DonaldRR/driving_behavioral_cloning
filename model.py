@@ -15,8 +15,8 @@ def model():
     print(input.get_shape())
     # Crop and resize input
     input_ = Cropping2D(((60, 0), (0, 0)))(input)
-    input_ = Lambda(lambda x: resize_images(x, 224, 224, data_format="channels_last"))(input_)
-    input_ = Lambda(lambda x: resize_images(x, 1 / 100, 1 / 320, data_format="channels_last"))(input_)
+    input_ = Lambda(lambda x: resize_images(x, 56, 7, data_format="channels_last"))(input_)
+    input_ = Lambda(lambda x: resize_images(x, 1 / 25, 1 / 10, data_format="channels_last"))(input_)
 
     vgg19_base = VGG19(include_top=False)
     for i in range(len(vgg19_base.layers)):
