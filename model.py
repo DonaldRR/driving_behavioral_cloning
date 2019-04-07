@@ -14,7 +14,7 @@ def model():
     input = Input(shape=(160, 320, 3), )
 
     # Crop and resize input
-    input_ = Cropping2D(((61, 0), (0, 0)))(input)
+    input_ = Cropping2D(((60, 0), (0, 0)))(input)
     #     input_ = Lambda(lambda x: resize_images(x, 0.5, 0.5, data_format="channels_last"))(input)
 
     # vgg19_base = VGG19(include_top=False)
@@ -25,6 +25,9 @@ def model():
 
         # Convolutions
     conv = BatchNormalization()(input_)
+    conv = Conv2D(32, (3, 3), activation='relu')(conv)
+    conv = Conv2D(32, (3, 3), activation='relu')(conv)
+    conv = MaxPool2D((2, 2))(conv)
     conv = Conv2D(64, (3, 3), activation='relu')(conv)
     conv = Conv2D(64, (3, 3), activation='relu')(conv)
     conv = MaxPool2D((2, 2))(conv)
