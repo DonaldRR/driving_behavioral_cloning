@@ -13,21 +13,28 @@ def model():
     print(input.get_shape())
     # Crop and resize input
     input_ = Cropping2D(((60, 0), (0, 0)))(input)
-    # input_ = Lambda(lambda x: x[:, 60:, :, :])(input)
-    # input_ = Lambda(lambda x: resize_images(x, 0.5, 0.5, data_format="channels_last"))(input_)
-    # input_ = Lambda(lambda x: resize_images(x, ))
+    input_ = Lambda(lambda x: resize_images(x, 224, 224, data_format="channels_last"))(input_)
+    input_ = Lambda(lambda x: resize_images(x, 1 / 100, 1 / 320, data_format="channels_last"))(input_)
 
-    # Convolutions
-    conv = BatchNormalization()(input_)
-    conv = Conv2D(16, (3, 3), activation='relu')(conv)
-    conv = Conv2D(16, (3, 3), activation='relu')(conv)
-    conv = MaxPool2D((2, 2))(conv)
-    conv = Conv2D(32, (3, 3), activation='relu')(conv)
-    conv = Conv2D(32, (3, 3), activation='relu')(conv)
-    conv = MaxPool2D((2, 2))(conv)
+    vgg19_base = VGG19(include_top=False)
+    for i in range(len(vgg19_base.layers)):
+        vgg19_base.layers[i].trainable = False
+    for i in range(10):
+        vgg19_base.layers.pop()
+
+        # Convolutions
+    #     conv = BatchNormalization()(input_)
+    #     conv = Conv2D(16, (3, 3), activation='relu')(conv)
+    #     conv = Conv2D(16, (3, 3), activation='relu')(conv)
+    #     conv = MaxPool2D((2, 2))(conv)
+    #     conv = Conv2D(32, (3, 3), activation='relu')(conv)
+    #     conv = Conv2D(32, (3, 3), activation='relu')(conv)
+    #     conv = MaxPool2D((2, 2))(conv)
+
+    vgg = vgg19_base(input_)
 
     # Denses
-    dense = Flatten()(conv)
+    dense = Flatten()(vgg)
     dense = Dense(32)(dense)
     dense = Dropout(0.5)(dense)
     dense = Dense(16)(dense)
