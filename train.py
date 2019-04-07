@@ -35,7 +35,7 @@ if __name__ == '__main__':
     """ Read images """
     n_imgs = center_img_fns.shape[0]
     print(os.path.join('/opt',center_img_fns[0][68:]))
-    imgs = [ cv2.imread(center_img_fns[i][68:]) for i in tqdm(range(n_imgs))]
+    imgs = [cv2.resize(cv2.imread(center_img_fns[i][68:])[60:, :, :], (224, 224)) for i in tqdm(range(n_imgs))]
     imgs = np.array(imgs)
 
     """ Get training and vlidation data """
