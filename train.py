@@ -75,14 +75,19 @@ if __name__ == '__main__':
     from sklearn.model_selection import train_test_split
 
     train_X, valid_X, train_y, valid_y = train_test_split(imgs, angles, test_size=0.2)
+    print("Training shape:{}, {}".format(train_X.shape, train_y))
+    print("Validation shape:{}, {}".format(valid_X, valid_y))
 
     """ Load model """
     model = model()
     model.summary()
 
-    n_epochs = 10
+    print("Start training ...")
+    n_epochs = 5
     batch_size = 128
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mean_squared_error'])
     hist = model.fit(train_X, train_y, epochs=n_epochs, batch_size=batch_size, validation_data=[valid_X, valid_y])
 
-    model.save('model.h5')
+    model_name = 'model.h5'
+    model.save(model_name)
+    print("Model {} saved.".format(model_name))
