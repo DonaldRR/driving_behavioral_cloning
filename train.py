@@ -79,7 +79,7 @@ if __name__ == '__main__':
 
     """ Training """
     print("Start training ...")
-    n_epochs = 3
+    n_epochs = 6
     batch_size = 32
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mean_squared_error'])
     hist = model.fit_generator(train_generator,
