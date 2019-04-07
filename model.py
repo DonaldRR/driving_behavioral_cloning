@@ -11,12 +11,11 @@ from keras.applications.resnet50 import ResNet50
 # Model creator
 def model():
     # Input
-    input = Input(shape=(160, 320, 3), )
-    print(input.get_shape())
+    input = Input(shape=(224, 224, 3), )
+
     # Crop and resize input
-    input_ = Cropping2D(((60, 0), (0, 0)))(input)
-    input_ = Lambda(lambda x: resize_images(x, 56, 7, data_format="channels_last"))(input_)
-    input_ = Lambda(lambda x: resize_images(x, 1 / 25, 1 / 10, data_format="channels_last"))(input_)
+    #     input_ = Cropping2D(((61, 0), (0, 0)))(input)
+    #     input_ = Lambda(lambda x: resize_images(x, 0.5, 0.5, data_format="channels_last"))(input)
 
     vgg19_base = VGG19(include_top=False)
     for i in range(len(vgg19_base.layers)):
@@ -33,7 +32,7 @@ def model():
     #     conv = Conv2D(32, (3, 3), activation='relu')(conv)
     #     conv = MaxPool2D((2, 2))(conv)
 
-    vgg = vgg19_base(input_)
+    vgg = vgg19_base(input)
 
     # Denses
     dense = Flatten()(vgg)
