@@ -34,9 +34,6 @@ def generator(samples, batch_size=32):
                 center_image = cv2.imread(batch_sample[0])
                 left_image = cv2.imread(batch_sample[1].strip(' '))
                 right_image = cv2.imread(batch_sample[2].strip(' '))
-                # center_image = cv2.imread(os.path.join('./ori_data', batch_sample[0]))
-                # left_image = cv2.imread(os.path.join('./ori_data', batch_sample[1].strip(' ')))
-                # right_image = cv2.imread(os.path.join('./ori_data', batch_sample[2].strip(' ')))
                 center_angle = float(batch_sample[3])
                 left_angle = float(batch_sample[3]) + 0.1
                 right_angle = float(batch_sample[3]) - 0.1
@@ -71,7 +68,11 @@ def process_sheet(folder_name):
                                        line[j][[t.span()[0] for t in finditer(r'IMG', line[j])][0]:])
             sheet.append(line)
 
-    return np.array(sheet)
+    zero_inds = np.where(sheet[:, 3]==0)[0]
+    retain_inds = np.random.choice(zero_inds, ceil(len(zero_items)/3))
+
+    return shuffle(np.concatenate(sheet[sheet[:,3]!=0], sheet[retain_inds]))
+    # return np.array(sheet)
 
 import argparse
 if __name__ == '__main__':
