@@ -12,6 +12,8 @@ from model import *
 import sklearn
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
+import re
+from re import finditer
 
 
 def generator(samples, batch_size=32):
@@ -29,9 +31,12 @@ def generator(samples, batch_size=32):
             images = []
             angles = []
             for batch_sample in batch_samples:
-                center_image = cv2.imread(os.path.join('./ori_data', batch_sample[0]))
-                left_image = cv2.imread(os.path.join('./ori_data', batch_sample[1].strip(' ')))
-                right_image = cv2.imread(os.path.join('./ori_data', batch_sample[2].strip(' ')))
+                center_image = cv2.imread(batch_sample[0])
+                left_image = cv2.imread(batch_sample[1].strip(' '))
+                right_image = cv2.imread(batch_sample[2].strip(' '))
+                # center_image = cv2.imread(os.path.join('./ori_data', batch_sample[0]))
+                # left_image = cv2.imread(os.path.join('./ori_data', batch_sample[1].strip(' ')))
+                # right_image = cv2.imread(os.path.join('./ori_data', batch_sample[2].strip(' ')))
                 center_angle = float(batch_sample[3])
                 left_angle = float(batch_sample[3]) + 0.1
                 right_angle = float(batch_sample[3]) - 0.1
@@ -57,30 +62,45 @@ def process_sheet(folder_name):
     csv_fns = [os.path.join(data_dirs[i], csv_fn) for i in range(len(data_dirs))]
 
     sheet = []
-    for fn in csv_fns:
+    for i in range(len(csv_fns)):
         f = open(fn, 'r')
         reader = csv.reader(f)
-        for line in reader:
+        for line in tqdm(reader):
+            for j in range(3):
+                line[j] = os.path.join(data_dirs[i],
+                                       line[j][[t.span()[0] for t in finditer(r'IMG', line[j])][0]:])
             sheet.append(line)
 
     return np.array(sheet)
 
+import argparse
 if __name__ == '__main__':
 
-    """ Load data"""
-    sheet = process_sheet('./ori_data')
-    train_sheet, valid_sheet = train_test_split(sheet, test_size=0.2)
-    train_generator = generator(train_sheet)
-    valid_generator = generator(valid_sheet)
+    """ Parse arguments """
+    parser = argparse.ArgumentParser()
+    parser.add_argument(name='-e', default=5, type=int, dest='epochs')
+    parser.add_argument(name='-o', default='model.h5', dest='output')
+    parser.add_argument(name='-f', default='ori_data', dest='folder')
+    parser.add_argument(name='-b', default=16, type=int, dest='batch_size')
+    args = parser.parse_args()
+
+    """ Variables"""
+    n_epochs = args.epochs
+    batch_size = args.batch_size
+    model_name = args.output
 
     """ Load model """
     model = model()
     model.summary()
 
+    """ Load data"""
+    sheet = process_sheet('./', args.folder)
+    train_sheet, valid_sheet = train_test_split(sheet, test_size=0.2)
+    train_generator = generator(train_sheet, batch_size)
+    valid_generator = generator(valid_sheet, batch_size)
+
     """ Training """
     print("Start training ...")
-    n_epochs = 5
-    batch_size = 16
     model.compile(optimizer='adam', loss='mean_absolute_error', metrics=['mean_absolute_error'])
     hist = model.fit_generator(train_generator,
                                epochs=n_epochs,
@@ -90,6 +110,5 @@ if __name__ == '__main__':
                                verbose=1)
 
     """ Save model"""
-    model_name = 'model.h5'
     model.save(model_name)
     print("Model {} saved.".format(model_name))
