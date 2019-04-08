@@ -78,10 +78,10 @@ if __name__ == '__main__':
 
     """ Parse arguments """
     parser = argparse.ArgumentParser()
-    parser.add_argument(name='-e', default=5, type=int, dest='epochs')
-    parser.add_argument(name='-o', default='model.h5', dest='output')
-    parser.add_argument(name='-f', default='ori_data', dest='folder')
-    parser.add_argument(name='-b', default=16, type=int, dest='batch_size')
+    parser.add_argument('-e', default=5, type=int, dest='epochs')
+    parser.add_argument('-o', default='model.h5', dest='output')
+    parser.add_argument('-f', default='ori_data', dest='folder')
+    parser.add_argument('-b', default=16, type=int, dest='batch_size')
     args = parser.parse_args()
 
     """ Variables"""
