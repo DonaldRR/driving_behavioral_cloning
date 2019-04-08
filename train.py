@@ -94,7 +94,7 @@ if __name__ == '__main__':
     model.summary()
 
     """ Load data"""
-    sheet = process_sheet('./', args.folder)
+    sheet = process_sheet(os.path.join('./', args.folder))
     train_sheet, valid_sheet = train_test_split(sheet, test_size=0.2)
     train_generator = generator(train_sheet, batch_size)
     valid_generator = generator(valid_sheet, batch_size)
