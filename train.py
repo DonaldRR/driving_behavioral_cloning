@@ -66,12 +66,18 @@ def process_sheet(folder_name):
             for j in range(3):
                 line[j] = os.path.join(data_dirs[i],
                                        line[j][[t.span()[0] for t in finditer(r'IMG', line[j])][0]:])
+            if type(line[3])==str:
+                line[3] = float(line[3].strip(' '))
             sheet.append(line)
-
-    zero_inds = np.where(sheet[:, 3]==0)[0]
-    retain_inds = np.random.choice(zero_inds, ceil(len(zero_items)/3))
-
-    return shuffle(np.concatenate(sheet[sheet[:,3]!=0], sheet[retain_inds]))
+    
+    sheet = np.array(sheet)
+    
+    zero_inds = np.where(sheet[:, 3]=='0.0')[0]
+    nonzero_inds = np.where(sheet[:,3]!='0.0')[0]
+    retain_inds = np.random.choice(zero_inds, ceil(len(zero_inds)/3))
+    print(len(sheet[nonzero_inds, :]))
+    print(len(sheet[retain_inds, :]))
+    return shuffle(np.concatenate((sheet[nonzero_inds, :], sheet[retain_inds, :])))
     # return np.array(sheet)
 
 import argparse
