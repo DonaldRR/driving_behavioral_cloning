@@ -63,7 +63,7 @@ def process_sheet(folder_name):
 
     sheet = []
     for i in range(len(csv_fns)):
-        f = open(fn, 'r')
+        f = open(csv_fn[i], 'r')
         reader = csv.reader(f)
         for line in tqdm(reader):
             for j in range(3):
