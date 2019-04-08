@@ -81,7 +81,7 @@ if __name__ == '__main__':
     print("Start training ...")
     n_epochs = 8
     batch_size = 16
-    model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mean_squared_error'])
+    model.compile(optimizer='adam', loss='mean_absolute_error', metrics=['mean_absolute_error'])
     hist = model.fit_generator(train_generator,
                                epochs=n_epochs,
                                steps_per_epoch=ceil(len(train_sheet) / batch_size),
