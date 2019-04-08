@@ -57,7 +57,7 @@ def process_sheet(folder_name):
     Process all running CSV files to one sheet
     """
 
-    data_dirs = glob.glob(folder_name)
+    data_dirs = glob.glob(folder_name+'/*')
     csv_fn = "driving_log.csv"
     csv_fns = [os.path.join(data_dirs[i], csv_fn) for i in range(len(data_dirs))]
 
