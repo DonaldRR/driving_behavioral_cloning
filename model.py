@@ -10,7 +10,7 @@ from keras.applications.resnet50 import ResNet50
 from keras.applications.mobilenet import MobileNet
 
 # Model creator
-def model():
+def myModel():
     # Input
     input = Input(shape=(160, 320, 3),)
     input_ = Lambda(lambda x: (x - [106.13, 115.97, 124.96]) / 255.)(input)
@@ -18,11 +18,15 @@ def model():
     input_ = BatchNormalization()(input_)
     
     # LeNet architecture
-    conv = Conv2D(16, (3, 3), strides=(2, 2))(input_)
-    conv = Conv2D(16, (3, 3), strides=(2, 2))(conv)
-    conv = Conv2D(32, (3, 3), strides=(2, 2))(conv)
-    conv = Conv2D(32, (3, 3), strides=(2, 2))(conv)
-                    
+    conv = Conv2D(16, (3, 3))(input_)
+    conv = Conv2D(16, (3, 3))(conv)
+    conv = MaxPool2D((2, 2))(conv)
+    conv = Conv2D(32, (3, 3))(conv)
+    conv = Conv2D(32, (3, 3))(conv)
+    conv = MaxPool2D((2, 2))(conv)
+    conv = Conv2D(64, (3, 3))(conv)
+    conv = Conv2D(64, (3, 3))(conv)
+    conv = MaxPool2D((2, 2))(conv)
     # Convolutions
     # Resnet of 3 types of building blocks
 #     conv1 = Conv2D(32, (5, 5), strides=(2, 2), padding='same', activation='relu')(input_)
