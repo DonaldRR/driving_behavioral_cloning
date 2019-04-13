@@ -13,25 +13,27 @@ from keras.applications.mobilenet import MobileNet
 def myModel():
     # Input
     input = Input(shape=(160, 320, 3),)
-    input_ = Lambda(lambda x: (x - [106.13, 115.97, 124.96]) / 255.)(input)
-    input_ = Cropping2D(((60, 30), (0, 0)))(input_)
+#     input_ = Lambda(lambda x: (x - [106.13, 115.97, 124.96]) / 255.)(input)
+    input_ = Cropping2D(((60, 30), (0, 0)))(input)
     
     # LeNet architecture
-    conv = Conv2D(16, (3, 3), activation='relu')(input_)
-    conv = BatchNormalization()(conv)
-    conv = Conv2D(16, (3, 3), activation='relu')(conv)
-    conv = BatchNormalization()(conv)
-    conv = MaxPool2D((2, 2))(conv)
+    conv = Conv2D(32, (3, 3), activation='relu')(input_)
+#     conv = BatchNormalization()(conv)
     conv = Conv2D(32, (3, 3), activation='relu')(conv)
-    conv = BatchNormalization()(conv)
-    conv = Conv2D(32, (3, 3), activation='relu')(conv)
-    conv = BatchNormalization()(conv)
+#     conv = BatchNormalization()(conv)
     conv = MaxPool2D((2, 2))(conv)
     conv = Conv2D(64, (3, 3), activation='relu')(conv)
-    conv = BatchNormalization()(conv)
+#     conv = BatchNormalization()(conv)
     conv = Conv2D(64, (3, 3), activation='relu')(conv)
-    conv = BatchNormalization()(conv)
+#     conv = BatchNormalization()(conv)
     conv = MaxPool2D((2, 2))(conv)
+    conv = Conv2D(128, (3, 3), activation='relu')(conv)
+#     conv = BatchNormalization()(conv)
+    conv = Conv2D(128, (3, 3), activation='relu')(conv)
+#     conv = BatchNormalization()(conv)
+    conv = MaxPool2D((2, 2))(conv)
+    
+    
     # Convolutions
     # Resnet of 3 types of building blocks
 #     conv1 = Conv2D(32, (5, 5), strides=(2, 2), padding='same', activation='relu')(input_)
