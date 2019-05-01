@@ -88,7 +88,7 @@ if __name__ == '__main__':
     parser.add_argument('-e', default=20, type=int, dest='epochs')
     parser.add_argument('-o', default='model.h5', dest='output')
     parser.add_argument('-f', default='ori_data', dest='folder')
-    parser.add_argument('-b', default=16, type=int, dest='batch_size')
+    parser.add_argument('-b', default=32, type=int, dest='batch_size')
     args = parser.parse_args()
 
     """ Variables"""
@@ -115,7 +115,7 @@ if __name__ == '__main__':
                                steps_per_epoch=ceil(len(train_sheet) / batch_size),
                                validation_data=valid_generator,
                                validation_steps=(len(valid_sheet) / batch_size),
-                               callbacks=[],
+                               callbacks=[es],
                                verbose=1)
 
     """ Save model"""
