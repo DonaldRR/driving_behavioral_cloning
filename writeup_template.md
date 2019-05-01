@@ -11,11 +11,11 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[steering_angles]: ""
-[steering_angles_non_zero]: ""
-[ori_images]: ""
-[cropped_images]: ""
-[flipped_images]: ""
+[steering_angles]: /screen_shots/steering_angle_hist.png "steering angles"
+[steering_angles_non_zero]: /screen_shots/steering_angle_hist_non_0.png "steering angles (non zero)"
+[ori_images]: /screen_shots/pic_cameras.png "original camera images"
+[cropped_images]: /screen_shots/cropped_pic_cameras.png "cropped images"
+[flipped_images]: /screen_shots/flip.png "flipped images"
 
 
 ## Rubric Points
@@ -33,11 +33,12 @@ More data is always better. Though some training data is provided in this projec
 
 Let's have a look at how the steering angles distributed in the sata. 
 
-![alt text][steering_angles]
+<img src="/screen_shots/steering_angle_hist.png" width="40%">
+
 
 Above histogram shows a large number of data is centered at value zero. So I did the statistics to find how many zero-value angles and non-zeros in this training. It turns out that there are `15910` and `4642` zero and nonzero values. The distribution of nonzeros are shown below.
 
-![alt text][steering_angles_non_zero]
+<img src="/screen_shots/steering_angle_hist_non_0.png" width="40%">
 
 It's clear that much of them are negative and this result is intuitive since the car drives counter-clockwise.
 
