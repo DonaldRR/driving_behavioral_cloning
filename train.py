@@ -97,7 +97,7 @@ if __name__ == '__main__':
     model_name = args.output
 
     """ Load model """
-    model = model()
+    model = myModel()
     model.summary()
 
     """ Load data"""
