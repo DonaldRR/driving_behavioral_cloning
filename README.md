@@ -84,3 +84,6 @@ python video.py run1 --fps 48
 
 Will run the video at 48 FPS. The default FPS is 60.
 
+#### `model.h5`
+
+The pre-trained model.
