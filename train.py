@@ -14,7 +14,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 import re
 from re import finditer
-
+from keras.callbacks import EarlyStopping
 
 def generator(samples, batch_size=32):
 
@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
     """ Parse arguments """
     parser = argparse.ArgumentParser()
-    parser.add_argument('-e', default=5, type=int, dest='epochs')
+    parser.add_argument('-e', default=20, type=int, dest='epochs')
     parser.add_argument('-o', default='model.h5', dest='output')
     parser.add_argument('-f', default='ori_data', dest='folder')
     parser.add_argument('-b', default=16, type=int, dest='batch_size')
@@ -108,12 +108,14 @@ if __name__ == '__main__':
 
     """ Training """
     print("Start training ...")
+    es = EarlyStopping(monitor='val_loss', min_delta=0.001, patience=2, verbose=1)
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mean_squared_error'])
     hist = model.fit_generator(train_generator,
                                epochs=n_epochs,
                                steps_per_epoch=ceil(len(train_sheet) / batch_size),
                                validation_data=valid_generator,
                                validation_steps=(len(valid_sheet) / batch_size),
+                               callbacks=[],
                                verbose=1)
 
     """ Save model"""
