@@ -87,3 +87,7 @@ Will run the video at 48 FPS. The default FPS is 60.
 #### `model.h5`
 
 The pre-trained model.
+
+#### `run0.mp4`
+
+Video from running the model on the simulator.
