@@ -14,7 +14,7 @@ def myModel():
     # Input
     input = Input(shape=(160, 320, 3),)
 #     input_ = Lambda(lambda x: (x - [106.13, 115.97, 124.96]) / 255.)(input)
-    input_ = Cropping2D(((60, 30), (0, 0)))(input)
+    input_ = Cropping2D(((60, 20), (0, 0)))(input)
     input_ = Lambda(lambda x: (x / 127.5) - 1)(input_)
 
 
