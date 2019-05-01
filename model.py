@@ -1,7 +1,7 @@
 import tensorflow
 import keras
 from keras.models import Model, Input
-from keras.layers import BatchNormalization, Conv2D, MaxPool2D, Flatten, Dense, Dropout, Lambda, Reshape, Cropping2D, Add
+from keras.layers import BatchNormalization, Conv2D, MaxPool2D, Flatten, Dense, Dropout, Lambda, Reshape, Cropping2D, Add, Activation
 from keras.optimizers import SGD, Adam
 from keras.backend import resize_images
 from keras.applications.vgg19 import VGG19
@@ -15,23 +15,63 @@ def myModel():
     input = Input(shape=(160, 320, 3),)
 #     input_ = Lambda(lambda x: (x - [106.13, 115.97, 124.96]) / 255.)(input)
     input_ = Cropping2D(((60, 30), (0, 0)))(input)
+    input_ = Lambda(lambda x: (x / 127.5) - 1)(input_)
+
+
+    # Nivdia Net
+    conv = Conv2D(3, (5, 5), strides=(2, 2), padding='valid')(input_)
+    conv = BatchNormalization()(conv)
+    conv = Activation('relu')(conv)
+
+    conv = Conv2D(24, (5, 5), strides=(2, 2), padding='valid')(conv)
+    conv = BatchNormalization()(conv)
+    conv = Activation('relu')(conv)
+
+    conv = Conv2D(36, (5, 5), strides=(2, 2), padding='valid')(conv)
+    conv = BatchNormalization()(conv)
+    conv = Activation('relu')(conv)
+
+    conv = Conv2D(48, (3, 3), strides=(2, 2), padding='valid')(conv)
+    conv = BatchNormalization()(conv)
+    conv = Activation('relu')(conv)
+
+    conv = Conv2D(64, (3, 3), strides=(2, 2), padding='valid')(conv)
+    conv = BatchNormalization()(conv)
+    conv = Activation('relu')(conv)
+
+    conv = Flatten()(conv)
+
+    fc = Dense(100)(conv)
+    fc = BatchNormalization()(fc)
+    fc = Activation('relu')(fc)
+
+    fc = Dense(50)(fc)
+    fc = BatchNormalization()(fc)
+    fc = Activation('relu')(fc)
+
+    fc = Dense(10)(fc)
+    fc = BatchNormalization()(fc)
+    fc = Activation('relu')(fc)
+
+    output = Dense(1)(fc)
+
     
-    # LeNet architecture
-    conv = Conv2D(32, (3, 3), activation='relu')(input_)
-#     conv = BatchNormalization()(conv)
-    conv = Conv2D(32, (3, 3), activation='relu')(conv)
-#     conv = BatchNormalization()(conv)
-    conv = MaxPool2D((2, 2))(conv)
-    conv = Conv2D(64, (3, 3), activation='relu')(conv)
-#     conv = BatchNormalization()(conv)
-    conv = Conv2D(64, (3, 3), activation='relu')(conv)
-#     conv = BatchNormalization()(conv)
-    conv = MaxPool2D((2, 2))(conv)
-    conv = Conv2D(128, (3, 3), activation='relu')(conv)
-#     conv = BatchNormalization()(conv)
-    conv = Conv2D(128, (3, 3), activation='relu')(conv)
-#     conv = BatchNormalization()(conv)
-    conv = MaxPool2D((2, 2))(conv)
+#     # LeNet architecture
+#     conv = Conv2D(32, (3, 3), activation='relu')(input_)
+# #     conv = BatchNormalization()(conv)
+#     conv = Conv2D(32, (3, 3), activation='relu')(conv)
+# #     conv = BatchNormalization()(conv)
+#     conv = MaxPool2D((2, 2))(conv)
+#     conv = Conv2D(64, (3, 3), activation='relu')(conv)
+# #     conv = BatchNormalization()(conv)
+#     conv = Conv2D(64, (3, 3), activation='relu')(conv)
+# #     conv = BatchNormalization()(conv)
+#     conv = MaxPool2D((2, 2))(conv)
+#     conv = Conv2D(128, (3, 3), activation='relu')(conv)
+# #     conv = BatchNormalization()(conv)
+#     conv = Conv2D(128, (3, 3), activation='relu')(conv)
+# #     conv = BatchNormalization()(conv)
+#     conv = MaxPool2D((2, 2))(conv)
     
     
     # Convolutions
@@ -108,15 +148,15 @@ def myModel():
 #     blockneck4_1 = MaxPool2D((2, 2))(block16_4)
 
 
-    # Denses
-    dense = Flatten()(conv)
-    dense = Dense(32)(dense)
-    dense = Dropout(0.5)(dense)
-    dense = Dense(16)(dense)
-    dense = Dropout(0.5)(dense)
-
-    # Output
-    output = Dense(1)(dense)
+    # # Denses
+    # dense = Flatten()(conv)
+    # dense = Dense(32)(dense)
+    # dense = Dropout(0.5)(dense)
+    # dense = Dense(16)(dense)
+    # dense = Dropout(0.5)(dense)
+    #
+    # # Output
+    # output = Dense(1)(dense)
 
     return Model(inputs=input, outputs=output, name='base')
 
